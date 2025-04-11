@@ -1,0 +1,24 @@
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.main-nav {
+    display: flex;
+    padding: 20px 50px;
+    justify-content: space-between;
+    font-weight: 600;
+}
+
+.nav-pair {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.search-bar {
+    min-width: 200px;
+    background-color: rgba(245, 245, 245, 1);
+    padding: 12px 20px;
+    border-radius: 25px;
+}
