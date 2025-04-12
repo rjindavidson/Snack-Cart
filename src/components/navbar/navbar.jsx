@@ -12,10 +12,10 @@ export const Navbar = ({ numItems }) => {
                 <form>
                     <input className='search-bar' type='text' placeholder='Search' />
                 </form>
-                <div>
+                <Link to="/cart">
                     Cart: {numItems}
-                </div>
+                </Link>
             </div>
-        </nav>
+        </nav >
     )
 }

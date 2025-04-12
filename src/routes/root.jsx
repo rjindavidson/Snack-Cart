@@ -5,8 +5,9 @@ import { useEffect, useState } from "react";
 export const Root = () => {
     const getInitialState = () => {
         const cartState = localStorage.getItem('cartItems');
-        return cartState ? JSON.parse(cartState) : []
+        return cartState ? JSON.parse(cartState) : [];
     }
+    
     const [cartItems, setCartItems] = useState(getInitialState());
 
 

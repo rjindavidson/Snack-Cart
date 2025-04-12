@@ -28,11 +28,15 @@ export const ShopPage = () => {
         return (
             <>
                 {shopItems.map((val) => (
-                    <Card key={val.name} itemName={val.name} description={val.description} image={val.image} />
+                    <Card 
+                        key={val.name} itemName={val.name} description={val.description} 
+                        image={val.image} cartItems={cartItems} setCartItems={setCartItems}
+                    />
                 ))}
             </>
         )
     }
+
 
     return (
         <div>
