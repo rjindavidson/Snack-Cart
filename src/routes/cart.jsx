@@ -5,17 +5,19 @@ export const Cart = () => {
     const [cartItems, setCartItems] = useOutletContext();
 
     function incrementItemTotal(id) {
-        console.log(id)
         setCartItems(prev => (
             prev.map((val) => val.id === id ? { ...val, quantity: val.quantity + 1 } : val)
         ))
     }
 
     function decrementItemTotal(id) {
-        console.log(id)
         setCartItems(prev => (
-            prev.map((val) => val.id === id ? { ...val, quantity: val.quantity - 1 } : val)
+            prev.map((val) => (val.id === id && val.quantity !== 1) ? { ...val, quantity: val.quantity - 1 } : val)
         ))
+    }
+
+    function deleteCartItem(id) {
+        setCartItems(prev => prev.filter((val) => val.id !== id))
     }
 
     function getCartItems() {
@@ -28,6 +30,7 @@ export const Cart = () => {
                             {item.itemName} | Q: {item.quantity}
                             <button onClick={() => incrementItemTotal(item.id)}> + </button>
                             <button onClick={() => decrementItemTotal(item.id)}> - </button>
+                            <button onClick={() => deleteCartItem(item.id)}>Trash</button>
                         </li>
                     ))}
             </ul>
