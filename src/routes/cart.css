@@ -1,6 +1,7 @@
 .cart-display {
     display: flex;
     justify-content: space-between;
+    padding: 40px;
 }
 
 .cart-image {
@@ -20,4 +21,15 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+}
+
+.cart-summary {
+    border: 1px solid;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    padding: 32px;
+    align-items: center;
+    align-self: flex-start;
+    height: auto;
 }

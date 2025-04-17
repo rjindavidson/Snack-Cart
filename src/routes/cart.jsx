@@ -33,7 +33,7 @@ export const Cart = () => {
                                     <img src={item.image} className="cart-image" />
                                 </div>
                                 <div>
-                                    <p>{item.itemName} | Q: {item.quantity}</p>
+                                    <p>{item.itemName} | {item.quantity}</p>
                                     <button onClick={() => incrementItemTotal(item.id)}> + </button>
                                     <button onClick={() => decrementItemTotal(item.id)}> - </button>
                                     <button onClick={() => deleteCartItem(item.id)}>Trash</button>
@@ -47,7 +47,12 @@ export const Cart = () => {
     return (
         <div className="cart-display">
             {getCartItems()}
-            <div>Temp</div>
+            <div className="cart-summary">
+                <h2>Order Summary</h2>
+                {cartItems.map((val) => (
+                    <p>{val.itemName}</p>
+                ))}
+            </div>
         </div>
     )
 }
