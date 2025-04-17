@@ -8,19 +8,24 @@ export const ShopPage = () => {
     // GET Database items
     const shopItems = [
         {
-            name: 'item 1',
-            description: 'item 1 description',
+            name: 'Lomo Saltado',
+            description: 'Sup Noodle',
             image: 'https://s3-media0.fl.yelpcdn.com/bphoto/eu8ss5pmEc-Sle9knGTasg/348s.jpg'
         },
         {
-            name: 'item 2',
-            description: 'item 2 description',
+            name: 'Tsukemen',
+            description: 'Ramen & Tsukemen TAO',
             image: 'https://s3-media0.fl.yelpcdn.com/bphoto/LMv0YwD9i16ZcZ7pXwDxCw/348s.jpg'
         },
         {
-            name: 'item 3',
-            description: 'item 3 description',
+            name: 'Pad Thai Boran',
+            description: 'Hanuman Thai',
             image: 'https://s3-media0.fl.yelpcdn.com/bphoto/ykgc1SORwZutX09wGGdkug/348s.jpg'
+        },
+        {
+            name: 'Seafood Mafaldine',
+            description: 'INI Ristorante',
+            image: 'https://s3-media0.fl.yelpcdn.com/bphoto/AsA3W49b8LXjM138QagJXg/348s.jpg'
         }
     ]
 

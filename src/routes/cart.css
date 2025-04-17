@@ -1,0 +1,23 @@
+.cart-display {
+    display: flex;
+    justify-content: space-between;
+}
+
+.cart-image {
+    height: 160px;
+    width: 160px;
+    border-radius: 8px;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.cart-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}

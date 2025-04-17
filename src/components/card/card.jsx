@@ -12,7 +12,7 @@ export const Card = ({ image, itemName, description, setCartItems }) => {
                     val.id === itemName ? {...val, quantity: val.quantity + 1} : val
                 ))
             }
-            return [...prev, {id: itemName, itemName: itemName, quantity: 1}]
+            return [...prev, {id: itemName, itemName: itemName, quantity: 1, image: image}]
         })
     }
 

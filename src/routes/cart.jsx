@@ -1,4 +1,5 @@
 import { useOutletContext } from "react-router";
+import './cart.css';
 
 
 export const Cart = () => {
@@ -22,23 +23,31 @@ export const Cart = () => {
 
     function getCartItems() {
         return (
-            <ul>
+            <ul className="cart-list">
                 {cartItems.length === 0 ?
                     <div>No items</div>
                     : cartItems.map((item) => (
                         <li key={item.id}>
-                            {item.itemName} | Q: {item.quantity}
-                            <button onClick={() => incrementItemTotal(item.id)}> + </button>
-                            <button onClick={() => decrementItemTotal(item.id)}> - </button>
-                            <button onClick={() => deleteCartItem(item.id)}>Trash</button>
+                            <div className="cart-item">
+                                <div>
+                                    <img src={item.image} className="cart-image" />
+                                </div>
+                                <div>
+                                    <p>{item.itemName} | Q: {item.quantity}</p>
+                                    <button onClick={() => incrementItemTotal(item.id)}> + </button>
+                                    <button onClick={() => decrementItemTotal(item.id)}> - </button>
+                                    <button onClick={() => deleteCartItem(item.id)}>Trash</button>
+                                </div>
+                            </div>
                         </li>
                     ))}
             </ul>
         )
     }
     return (
-        <div>
+        <div className="cart-display">
             {getCartItems()}
+            <div>Temp</div>
         </div>
     )
 }
