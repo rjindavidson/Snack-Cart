@@ -9,9 +9,7 @@ export const Navbar = ({ numItems }) => {
                 <Link to="/products">Store</Link>
             </div>
             <div className='nav-pair'>
-                <form>
-                    <input className='search-bar' type='text' placeholder='Search' />
-                </form>
+                <Link to="/sign-up">Profile</Link>
                 <Link to="/cart">
                     Cart: {numItems}
                 </Link>

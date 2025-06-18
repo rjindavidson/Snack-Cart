@@ -21,6 +21,24 @@ export const Cart = () => {
         setCartItems(prev => prev.filter((val) => val.id !== id))
     }
 
+
+
+    async function postCartItems() {
+        try {
+            const response = await fetch('http://localhost:5000/api/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(cartItems)
+            });
+            const data = await response.json();
+            console.log(data)
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
     function getCartItems() {
         return (
             <ul className="cart-list">
@@ -48,10 +66,13 @@ export const Cart = () => {
         <div className="cart-display">
             {getCartItems()}
             <div className="cart-summary">
-                <h2>Order Summary</h2>
-                {cartItems.map((val) => (
-                    <p>{val.itemName}</p>
-                ))}
+                <h2 className="cart-header">Order Summary</h2>
+                <div>
+                    {cartItems.map((val) => (
+                        <p key={val}>{val.itemName}</p>
+                    ))}
+                </div>
+                <button onClick={() => postCartItems()}>Checkout</button>
             </div>
         </div>
     )

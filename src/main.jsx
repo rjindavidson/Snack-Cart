@@ -7,7 +7,8 @@ import ErrorPage from "./error-page";
 import ShopPage from "./routes/shop-page";
 import Home from "./routes/home";
 import Cart from "./routes/cart";
-
+import SignUpPage from "./routes/sign-up-page";
+import AuthProvider from "./context/AuthContextProvider";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: "/cart",
         element: <Cart />
+      },
+      {
+        path: "/sign-up",
+        element: <SignUpPage />
       }
     ]
   }
@@ -33,6 +38,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>
 );
