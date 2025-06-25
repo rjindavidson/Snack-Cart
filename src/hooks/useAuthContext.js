@@ -6,23 +6,24 @@ export default function useAuthContext() {
     const [auth, setAuth] = useState();
 
     useEffect(() => {
+        async function checkAuth(token) {
+            try {
+                const authRes = await fetch('http://localhost:5000/api/users/validate-user',
+                    {
+                        headers: { Authorization: `Bearer ${token}` }
+                    }
+                );
+                const authStatus = await authRes.json();
+                setAuth(authStatus)
+            } catch (e) {
+                console.error(e.message)
+                return false;
+            }
+        }
+
         checkAuth(token)
     }, [token])
 
-    async function checkAuth(token) {
-        try {
-            const authRes = await fetch('http://localhost:5000/api/users/validate-user',
-                {
-                    headers: { Authorization: `Bearer ${token}` }
-                }
-            );
-            const authStatus = await authRes.json();
-            setAuth(authStatus)
-        } catch (e) {
-            console.error(e.message)
-            return false;
-        }
-    }
 
     return auth;
 }

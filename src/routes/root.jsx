@@ -1,13 +1,16 @@
 import { Outlet } from "react-router";
 import { Navbar } from "../components/navbar/navbar"
 import { useEffect, useState } from "react";
+import useAuthContext from "../hooks/useAuthContext";
 
 export const Root = () => {
+    const userAuthStatus = useAuthContext();
+
     const getInitialState = () => {
         const cartState = localStorage.getItem('cartItems');
         return cartState ? JSON.parse(cartState) : [];
     }
-    
+
     const [cartItems, setCartItems] = useState(getInitialState());
 
 
@@ -17,8 +20,8 @@ export const Root = () => {
 
     return (
         <div>
-            <Navbar numItems={cartItems.length} />
-            <Outlet context={[cartItems, setCartItems]}/>
+            <Navbar numItems={cartItems.length} authStatus={userAuthStatus}/>
+            <Outlet context={[cartItems, setCartItems, userAuthStatus]} />
         </div>
     )
 }

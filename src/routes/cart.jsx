@@ -1,9 +1,13 @@
-import { useOutletContext } from "react-router";
+import { Navigate, useOutletContext } from "react-router";
 import './cart.css';
 
 
 export const Cart = () => {
-    const [cartItems, setCartItems] = useOutletContext();
+    const [cartItems, setCartItems, authStatus] = useOutletContext();
+
+    if (!authStatus?.hasAuth) {
+        return <Navigate to='/sign-up' replace />
+    }
 
     function incrementItemTotal(id) {
         setCartItems(prev => (
@@ -21,22 +25,30 @@ export const Cart = () => {
         setCartItems(prev => prev.filter((val) => val.id !== id))
     }
 
+    console.log(cartItems);
 
-
+    const webhookUrl = 'https://discord.com/api/webhooks/1387284655664926771/_8WeSXKLzWvakClrjhbViDau2pFN4bnPWr2pIH3Apu4RDfUgM-aqJxQtwkd3_z0S8e-K'
     async function postCartItems() {
-        try {
-            const response = await fetch('http://localhost:5000/api/orders', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(cartItems)
+        const message = {
+            content: `Order: ${cartItems[0].itemName}`,
+            username: 'Snack Cart',
+        };
+
+        fetch(webhookUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(message)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    console.error('Failed to send message:', response.status, response.statusText);
+                }
+            })
+            .catch(error => {
+                console.error('Error sending message:', error);
             });
-            const data = await response.json();
-            console.log(data)
-        } catch (e) {
-            console.error(e)
-        }
     }
 
     function getCartItems() {
@@ -62,6 +74,7 @@ export const Cart = () => {
             </ul>
         )
     }
+
     return (
         <div className="cart-display">
             {getCartItems()}
@@ -69,7 +82,7 @@ export const Cart = () => {
                 <h2 className="cart-header">Order Summary</h2>
                 <div>
                     {cartItems.map((val) => (
-                        <p key={val}>{val.itemName}</p>
+                        <p key={val.id}>{val.itemName}</p>
                     ))}
                 </div>
                 <button onClick={() => postCartItems()}>Checkout</button>
