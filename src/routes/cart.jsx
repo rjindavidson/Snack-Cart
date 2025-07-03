@@ -1,7 +1,6 @@
 import { Navigate, useOutletContext } from "react-router";
 import './cart.css';
 
-
 export const Cart = () => {
     const [cartItems, setCartItems, authStatus] = useOutletContext();
 
@@ -27,28 +26,25 @@ export const Cart = () => {
 
     console.log(cartItems);
 
-    const webhookUrl = 'https://discord.com/api/webhooks/1387284655664926771/_8WeSXKLzWvakClrjhbViDau2pFN4bnPWr2pIH3Apu4RDfUgM-aqJxQtwkd3_z0S8e-K'
     async function postCartItems() {
-        const message = {
+        const order = {
             content: `Order: ${cartItems[0].itemName}`,
             username: 'Snack Cart',
         };
 
-        fetch(webhookUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(message)
-        })
-            .then(response => {
-                if (!response.ok) {
-                    console.error('Failed to send message:', response.status, response.statusText);
-                }
-            })
-            .catch(error => {
-                console.error('Error sending message:', error);
+        try {
+            const checkout = await fetch('http://localhost:5000/api/users/checkout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(order)
             });
+            const x = await checkout.json();
+            console.log(x)
+        } catch (e) {
+            console.error('Error in checkout:', e);
+        }
     }
 
     function getCartItems() {
