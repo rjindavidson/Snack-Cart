@@ -31,7 +31,7 @@ export const Cart = () => {
             content: `Order: ${cartItems[0].itemName}`,
             username: 'Snack Cart',
         };
-
+        
         try {
             const checkout = await fetch('http://localhost:5000/api/users/checkout', {
                 method: 'POST',

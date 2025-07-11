@@ -1,41 +1,28 @@
 import { useOutletContext } from "react-router";
 import { Card } from "../components/card/card";
 import './shop-page.css'
+import { useEffect, useState } from "react";
 
 export const ShopPage = () => {
-    const [cartItems, setCartItems] = useOutletContext();
+    const [_, setCartItems] = useOutletContext();
+    const [shopItems, setShopItems] = useState([]);
 
-    // GET Database items
-    const shopItems = [
-        {
-            name: 'Lomo Saltado',
-            description: 'Sup Noodle',
-            image: 'https://s3-media0.fl.yelpcdn.com/bphoto/eu8ss5pmEc-Sle9knGTasg/348s.jpg'
-        },
-        {
-            name: 'Tsukemen',
-            description: 'Ramen & Tsukemen TAO',
-            image: 'https://s3-media0.fl.yelpcdn.com/bphoto/LMv0YwD9i16ZcZ7pXwDxCw/348s.jpg'
-        },
-        {
-            name: 'Pad Thai Boran',
-            description: 'Hanuman Thai',
-            image: 'https://s3-media0.fl.yelpcdn.com/bphoto/ykgc1SORwZutX09wGGdkug/348s.jpg'
-        },
-        {
-            name: 'Seafood Mafaldine',
-            description: 'INI Ristorante',
-            image: 'https://s3-media0.fl.yelpcdn.com/bphoto/AsA3W49b8LXjM138QagJXg/348s.jpg'
+    useEffect(() => {
+        const getAllProducts = async () => {
+            const fetchProducts = await fetch('http://localhost:5000/api/products/all')
+            const products = await fetchProducts.json()
+            setShopItems(products)
         }
-    ]
+        getAllProducts()
+    }, [])
+
 
     function renderShopItems() {
         return (
             <>
                 {shopItems.map((val) => (
-                    <Card 
-                        key={val.name} itemName={val.name} description={val.description} 
-                        image={val.image} cartItems={cartItems} setCartItems={setCartItems}
+                    <Card
+                        key={val.id} shopItem={val} setCartItems={setCartItems}
                     />
                 ))}
             </>
