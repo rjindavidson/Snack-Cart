@@ -1,13 +1,11 @@
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import useAuthContext from "../hooks/useAuthContext";
 import { Navigate } from "react-router";
 
 export const SignUpPage = () => {
-    const { setToken, setUser } = useContext(AuthContext);
-    const userAuthStatus = useAuthContext();
+    const { token, setToken, setUser, setUserID } = useContext(AuthContext);
 
-    if (userAuthStatus?.hasAuth) {
+    if (token) {
         return <Navigate to='/' replace />
     }
 
@@ -18,17 +16,14 @@ export const SignUpPage = () => {
         for (let key of formData.keys()) {
             user[key] = formData.get(key);
         }
-        console.log(user)
         try {
-            const response = await fetch('http://localhost:5000/api/users/register', {
+            await fetch('http://localhost:5000/api/users/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(user),
             });
-            const data = await response.json();
-            console.log(data);
         } catch (e) {
             console.error(e);
         }
@@ -52,29 +47,30 @@ export const SignUpPage = () => {
             const data = await response.json();
             setUser(data.user.name)
             setToken(data.token)
+            setUserID(data.user.id)
         } catch (e) {
             console.error(e);
         }
     }
 
     return (
-            <div>
-                <form onSubmit={handleSignup}>
-                    <label htmlFor='name'>Username</label>
-                    <input id='name' name='name' placeholder="Name" type='text' />
-                    <label htmlFor='password'>Password</label>
-                    <input id='password' name='password' placeholder="Password" type='password' />
-                    <button type="submit">Sign up</button>
-                </form>
-                <br></br>
-                <form onSubmit={signIn}>
-                    <label htmlFor='login-name'>Username</label>
-                    <input id='login-name' name='name' placeholder="Name" type='text' />
-                    <label htmlFor='login-password'>Password</label>
-                    <input id='login-password' name='password' placeholder="Password" type='password' />
-                    <button type="submit">Sign In</button>
-                </form>
-            </div>
+        <div>
+            <form onSubmit={handleSignup}>
+                <label htmlFor='name'>Username</label>
+                <input id='name' name='name' placeholder="Name" type='text' />
+                <label htmlFor='password'>Password</label>
+                <input id='password' name='password' placeholder="Password" type='password' />
+                <button type="submit">Sign up</button>
+            </form>
+            <br></br>
+            <form onSubmit={signIn}>
+                <label htmlFor='login-name'>Username</label>
+                <input id='login-name' name='name' placeholder="Name" type='text' />
+                <label htmlFor='login-password'>Password</label>
+                <input id='login-password' name='password' placeholder="Password" type='password' />
+                <button type="submit">Sign In</button>
+            </form>
+        </div>
     )
 }
 

@@ -1,68 +1,86 @@
-import { Navigate, useOutletContext } from "react-router";
+import { Navigate } from "react-router";
 import './cart.css';
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 export const Cart = () => {
-    const [cartItems, setCartItems, authStatus] = useOutletContext();
+    const { userID, token } = useContext(AuthContext);
+    const [cartItems, setCartItems] = useState([]);
 
-    if (!authStatus?.hasAuth) {
+    useEffect(() => {
+        const getCartItems = async () => {
+            const getCart = await fetch(`http://localhost:5000/api/cart/getCart?user_id=${userID}`)
+            const cart = await getCart.json()
+            setCartItems(cart)
+        }
+        getCartItems()
+    }, [userID])
+
+    if (!token) {
         return <Navigate to='/sign-up' replace />
     }
 
-    function incrementItemTotal(id) {
-        setCartItems(prev => (
-            prev.map((val) => val.id === id ? { ...val, quantity: val.quantity + 1 } : val)
-        ))
+    function incrementItemTotal() {
+
     }
 
-    function decrementItemTotal(id) {
-        setCartItems(prev => (
-            prev.map((val) => (val.id === id && val.quantity !== 1) ? { ...val, quantity: val.quantity - 1 } : val)
-        ))
+    function decrementItemTotal() {
+
     }
 
-    function deleteCartItem(id) {
-        setCartItems(prev => prev.filter((val) => val.id !== id))
+    async function deleteCartItem(item_id) {
+        try {
+            await fetch(`http://localhost:5000/api/cart/deleteFromCart?user_id=${userID}&product_id=${item_id}`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            let updatedCart = cartItems.filter((item) => item.product_id !== item_id)
+            setCartItems(updatedCart)
+        } catch (e) {
+            console.error(e)
+        }
     }
-
-    console.log(cartItems);
 
     async function postCartItems() {
+        let x = cartItems.map((item) => {
+            return `${item.amount} ${item.name}\n`
+        })
         const order = {
-            content: `Order: ${cartItems[0].itemName}`,
+            content: `Order: ${x}`,
             username: 'Snack Cart',
         };
-        
         try {
-            const checkout = await fetch('http://localhost:5000/api/users/checkout', {
+            await fetch('http://localhost:5000/api/cart/checkout', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify(order)
             });
-            const x = await checkout.json();
-            console.log(x)
         } catch (e) {
             console.error('Error in checkout:', e);
         }
     }
 
-    function getCartItems() {
+    function renderCartItems() {
         return (
             <ul className="cart-list">
                 {cartItems.length === 0 ?
                     <div>No items</div>
                     : cartItems.map((item) => (
-                        <li key={item.id}>
+                        <li key={item.location}>
                             <div className="cart-item">
                                 <div>
                                     <img src={item.image} className="cart-image" />
                                 </div>
                                 <div>
-                                    <p>{item.itemName} | {item.quantity}</p>
-                                    <button onClick={() => incrementItemTotal(item.id)}> + </button>
-                                    <button onClick={() => decrementItemTotal(item.id)}> - </button>
-                                    <button onClick={() => deleteCartItem(item.id)}>Trash</button>
+                                    <p>{item.name} | {item.amount}</p>
+                                    <button onClick={() => incrementItemTotal(item.product_id)}> + </button>
+                                    <button onClick={() => decrementItemTotal(item.product_id)}> - </button>
+                                    <button onClick={() => deleteCartItem(item.product_id)}>Trash</button>
                                 </div>
                             </div>
                         </li>
@@ -73,12 +91,12 @@ export const Cart = () => {
 
     return (
         <div className="cart-display">
-            {getCartItems()}
+            {renderCartItems()}
             <div className="cart-summary">
                 <h2 className="cart-header">Order Summary</h2>
                 <div>
                     {cartItems.map((val) => (
-                        <p key={val.id}>{val.itemName}</p>
+                        <p key={val.location}>{val.name}</p>
                     ))}
                 </div>
                 <button onClick={() => postCartItems()}>Checkout</button>

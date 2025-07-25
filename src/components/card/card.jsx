@@ -1,18 +1,35 @@
 import { Link } from "react-router-dom";
 import "./card.css";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
-export const Card = ({ shopItem, setCartItems }) => {
-    function updateCart() {
-        setCartItems(prev => {
-            const itemExists = prev.find((val) => val.id === shopItem.id);
+export const Card = ({ shopItem }) => {
+    const { userID, token } = useContext(AuthContext);
 
-            if (itemExists) {
-                return prev.map((val) => (
-                    val.id === shopItem.name ? {...val, quantity: val.quantity + 1} : val
-                ))
-            }
-            return [...prev, {id: shopItem.id, itemName: shopItem.name, quantity: 1, image: shopItem.image}]
-        })
+    async function postToCart() {
+        const cartItem = {
+            user_id: userID,
+            product_id: shopItem.id,
+            amount: 1,
+        }
+        try {
+            let x = await fetch('http://localhost:5000/api/cart/addToCart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(cartItem)
+            })
+            let y = await x.json()
+            console.log(y)
+        } catch (e) {
+            console.error('Error adding to cart:', e);
+        }
+    }
+
+    async function updateCart() {
+        await postToCart()
     }
 
 

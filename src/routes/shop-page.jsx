@@ -1,10 +1,8 @@
-import { useOutletContext } from "react-router";
 import { Card } from "../components/card/card";
 import './shop-page.css'
 import { useEffect, useState } from "react";
 
 export const ShopPage = () => {
-    const [_, setCartItems] = useOutletContext();
     const [shopItems, setShopItems] = useState([]);
 
     useEffect(() => {
@@ -16,19 +14,17 @@ export const ShopPage = () => {
         getAllProducts()
     }, [])
 
-
     function renderShopItems() {
         return (
             <>
                 {shopItems.map((val) => (
                     <Card
-                        key={val.id} shopItem={val} setCartItems={setCartItems}
+                        key={val.id} shopItem={val}
                     />
                 ))}
             </>
         )
     }
-
 
     return (
         <div>
